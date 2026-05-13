@@ -278,7 +278,7 @@ cleanSnapshot-checkCode/
 不会。清理策略是**保留最新版本**，只删除旧版本文件。
 
 
-### Q3: 如何将 cleanSnapshot-qualityCode-1.0.jar 添加到本地 Maven 仓库
+### Q4: 如何将 cleanSnapshot-qualityCode-1.0.jar 添加到本地 Maven 仓库
 
 在 PowerShell 中执行以下命令：
 
@@ -301,7 +301,7 @@ mvn install:install-file -Dfile=cleanSnapshot-qualityCode-1.0.jar -DgroupId=io.g
 mvn install:install-file -Dfile=D:\path\to\cleanSnapshot-qualityCode-1.0.jar -DgroupId=io.github.veh -DartifactId=cleanSnapshot-qualityCode -Dversion=1.0 -Dpackaging=maven-plugin```
 ```
 
-### Q4: 开源地址？
+### Q5: 开源地址？
 
 1. [https://github.com/VehGao/cleanSnapshot-qualityCode](https://github.com/VehGao/cleanSnapshot-qualityCode)
 2. [https://gitee.com/veh/cleanSnapshot-qualityCode](https://gitee.com/veh/cleanSnapshot-qualityCode)
