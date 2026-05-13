@@ -41,26 +41,6 @@ import static io.github.veh.maven.plugin.CleanOldVersionUtil.*;
  * 7，检查 Mapper.java 方法 是否缺少 @Param注解
  */
 @Mojo(name = "clean-snapshots", defaultPhase = LifecyclePhase.CLEAN)//插件内部的具体目标(Goal)名称：clean-snapshots，默认目标执行顺序为：CLEAN
-/**
- * Maven 插件 Mojo，用于清理本地仓库中旧版本 SNAPSHOT 文件并对项目代码进行规范性检查。
- * <p>主要功能包括：</p>
- * <ul>
- *   <li>1. 清理本地 Maven 仓库中旧版本的 SNAPSHOT 文件和孤立的元数据文件</li>
- *   <li>2. 检查 Mapper XML 中 LATERAL 子句是否包含 ORDER BY</li>
- *   <li>3. 检查 SQL 中是否使用了数据库不兼容函数（如 UNNEST、ISNULL、IFNULL 等）</li>
- *   <li>4. 检查 Mapper XML 中是否存在重复 ID 和标签未闭合问题</li>
- *   <li>5. 检查 SQL 字段名是否包含双引号</li>
- *   <li>6. 检查 DTO/VO 类中是否误用了 @TableField/@TableId 注解</li>
- *   <li>7. 检查 Mapper.java 方法参数是否缺少 @Param 注解</li>
- * </ul>
- * <p>对于 ar 模块和 insu 模块，检查不通过时会抛出异常中断构建；其他模块仅输出警告日志。</p>
- *
- * @parameter mapperXmlPath Mapper XML 文件所在路径，默认为 src/main/resources/mapper/
- * @parameter repoPath 本地 Maven 仓库路径，默认为 ${settings.localRepository}/
- * @parameter mapperJavaPath Mapper Java 文件所在包路径
- * @parameter dtoVoPath DTO/VO/PO 文件所在包路径
- * @parameter pattern 匹配需要清理的文件名模式，默认匹配带时间戳的 SNAPSHOT 文件
- */
 public class AutoCleanMojo extends AbstractMojo {
 
 
