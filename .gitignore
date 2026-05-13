@@ -1,0 +1,114 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### IntelliJ IDEA ###
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+# .gitignore 文件的作用 : 告诉 Git 在版本控制过程中忽略特定的文件或目录。
+# 这些文件通常是那些不需要被追踪的文件，比如编译生成的文件、日志文件、临时文件、个人配置文件等。
+# .gitignore 只对未被 Git 跟踪的文件起作用，如果文件已存在于git远程，则无法被 .gitignore控制
+
+# intelliJ.gitignore #
+.idea
+*.iml
+*.ipr
+*.iws
+*.http
+
+*.class
+*.log
+rebel.xml
+http
+.flattened-pom.xml
+
+# Gradle
+build
+.gradle
+.http
+
+testdata/
+out/
+
+# maven gitignore#
+target
+untitled
+
+# Java gitignore #
+.class
+.log
+
+# OSX
+.DS_Store
+
+
+# Eclipse git ignore#
+*.pydevproject
+.project
+.metadata
+bin/**
+*/bin/**
+tmp/**
+tmp/**/*
+configuration/**
+*.tmp
+*.bak
+*.orig
+*.swp
+*~.nib
+.classpath
+.settings/
+.loadpath
+.fileTable*
+.cache
+logs
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
