@@ -65,8 +65,8 @@ public class AutoCleanMojo extends AbstractMojo {
     private String projectBuildDirectory;
     private String logicalModeName = "";//逻辑模块名
 
-    // 使用线程安全的 ConcurrentHashMap 替代 System.setProperty 来跟踪执行状态
-    private static final ConcurrentHashMap<String, Boolean> executionTracker = new ConcurrentHashMap<>();
+    // 使用线程安全的 AtomicBoolean 来跟踪仓库清理是否已执行（全局级别，而非项目级别）
+    private static final java.util.concurrent.atomic.AtomicBoolean REPO_CLEANED = new java.util.concurrent.atomic.AtomicBoolean(false);
 
     /**
      * 插件执行入口方法，负责启动清理流程
@@ -92,13 +92,12 @@ public class AutoCleanMojo extends AbstractMojo {
             }
             String modelName = project.getArtifactId();
             // 清理各组中的旧版本文件（.jar 和 pom 和 -sources.jar ）和所有孤立的元数据文件（metadataExtensions）
-            // 使用项目唯一标识作为key，确保每个项目只执行一次清理操作
-            String executionKey = "clean.old.versions.executed." + project.getGroupId() + ":" + project.getArtifactId();
-            boolean alreadyExecuted = executionTracker.putIfAbsent(executionKey, true) != null;
-            if (!alreadyExecuted) {
+            // 使用全局原子布尔值确保整个构建过程中只清理一次仓库
+            boolean alreadyCleaned = REPO_CLEANED.get();
+            if (!alreadyCleaned && REPO_CLEANED.compareAndSet(false, true)) {
                 long startCleanRepo = System.currentTimeMillis();
                 cleanOldVersions(timestampPattern);
-                getLog().info("clean repository old versions SNAPSHOT File：" + (System.currentTimeMillis() - startCleanRepo) + " ms");
+                getLog().info("clean repository old versions SNAPSHOT File:" + (System.currentTimeMillis() - startCleanRepo) + " ms");
             }
             long startCheck = System.currentTimeMillis();
             boolean shouldCheck = false;
