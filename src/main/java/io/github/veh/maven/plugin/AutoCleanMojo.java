@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +41,7 @@ import static io.github.veh.maven.plugin.CleanOldVersionUtil.*;
  * 6，检查 DTO.java，VO.java 中的  @TableField 注解
  * 7，检查 Mapper.java 方法 是否缺少 @Param注解
  */
-@Mojo(name = "clean-snapshots", defaultPhase = LifecyclePhase.CLEAN)//插件内部的具体目标(Goal)名称：clean-snapshots，默认目标执行顺序为：CLEAN
+@Mojo(name = "clean-snapshots", defaultPhase = LifecyclePhase.CLEAN, threadSafe = true)//插件内部的具体目标(Goal)名称：clean-snapshots，默认目标执行顺序为：CLEAN，支持线程安全
 public class AutoCleanMojo extends AbstractMojo {
 
 
@@ -63,6 +64,9 @@ public class AutoCleanMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project.build.directory}", readonly = true)
     private String projectBuildDirectory;
     private String logicalModeName = "";//逻辑模块名
+
+    // 使用线程安全的 ConcurrentHashMap 替代 System.setProperty 来跟踪执行状态
+    private static final ConcurrentHashMap<String, Boolean> executionTracker = new ConcurrentHashMap<>();
 
     /**
      * 插件执行入口方法，负责启动清理流程
@@ -88,10 +92,10 @@ public class AutoCleanMojo extends AbstractMojo {
             }
             String modelName = project.getArtifactId();
             // 清理各组中的旧版本文件（.jar 和 pom 和 -sources.jar ）和所有孤立的元数据文件（metadataExtensions）
-            String executedFlag = "clean.old.versions.executed";// 使用系统属性确保 cleanOldVersions 只执行一次
-            boolean alreadyExecuted = System.getProperty(executedFlag) != null;
+            // 使用项目唯一标识作为key，确保每个项目只执行一次清理操作
+            String executionKey = "clean.old.versions.executed." + project.getGroupId() + ":" + project.getArtifactId();
+            boolean alreadyExecuted = executionTracker.putIfAbsent(executionKey, true) != null;
             if (!alreadyExecuted) {
-                System.setProperty(executedFlag, "true");
                 long startCleanRepo = System.currentTimeMillis();
                 cleanOldVersions(timestampPattern);
                 getLog().info("clean repository old versions SNAPSHOT File：" + (System.currentTimeMillis() - startCleanRepo) + " ms");
